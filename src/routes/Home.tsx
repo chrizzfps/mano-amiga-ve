@@ -213,7 +213,7 @@ export default function Home() {
                       Tú también puedes ser un héroe como Tsunami 🌊
                     </p>
                     <span className="inline-flex items-center gap-1 rounded-full bg-amarillo/20 px-3 py-0.5 text-[11px] font-bold text-amarillo-strong uppercase tracking-wider">
-                      ⭐ Héroe de la comunidad
+                      ⭐ Héroe Nacional
                     </span>
                   </div>
                 </div>

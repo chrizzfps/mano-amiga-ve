@@ -8,6 +8,8 @@ import { categoryLabel } from '@/lib/constants/categories'
 import { relativeTime } from '@/lib/utils/time'
 import { Link } from 'react-router-dom'
 import { IconArrowRight, IconMapFold } from '@/components/icons'
+import { getApproximateStateCoords } from '@/lib/venezuela-locations'
+import { jitterCoords } from '@/lib/utils/location'
 
 function pinColor(item: Item): string {
   if (item.type === 'need') return item.urgency === 'high' ? '#E15B49' : '#F2B441'
@@ -85,9 +87,19 @@ export default function MapPreview() {
     map.eachLayer((layer) => {
       if (layer instanceof L.Marker) map.removeLayer(layer)
     })
-    list
-      .filter((it) => it.lat != null && it.lng != null && !it.hidden)
-      .forEach((item) => {
+
+    const eligible = list
+      .filter((it) => !it.hidden)
+      .map((it) => {
+        if (it.lat != null && it.lng != null) return it
+        const stateCenter = getApproximateStateCoords(it.state_name)
+        if (!stateCenter) return null
+        const jittered = jitterCoords(stateCenter.lat, stateCenter.lng, 4000)
+        return { ...it, lat: jittered.lat, lng: jittered.lng }
+      })
+      .filter(Boolean) as Item[]
+
+    eligible.forEach((item) => {
         if (item.lat == null || item.lng == null) return
         const color = pinColor(item)
         const urgencyLabel = URGENCY[item.urgency].label
@@ -107,7 +119,9 @@ export default function MapPreview() {
       })
   }
 
-  const pinCount = items?.filter((it) => it.lat != null && it.lng != null).length ?? 0
+  const pinCount = items?.filter(
+    (it) => it.lat != null && it.lng != null || getApproximateStateCoords(it.state_name) != null
+  ).length ?? 0
 
   return (
     <div className="relative rounded-2xl overflow-hidden border border-line shadow-soft">

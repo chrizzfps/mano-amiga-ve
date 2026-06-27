@@ -1,5 +1,5 @@
 import 'leaflet/dist/leaflet.css'
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import type { Map } from 'leaflet'
 import type { Item } from '@/types/item'
 import type { CategoryId } from '@/types/item'
@@ -11,7 +11,8 @@ import { IconMapFold, IconSpark } from '@/components/icons'
 import { Container } from '@/components/layout'
 import { categoryLabel } from '@/lib/constants/categories'
 import { relativeTime } from '@/lib/utils/time'
-import { useState } from 'react'
+import { getApproximateStateCoords } from '@/lib/venezuela-locations'
+import { jitterCoords } from '@/lib/utils/location'
 
 /* ---- Colores por tipo de ítem ---- */
 function pinColor(item: Item): string {
@@ -127,9 +128,17 @@ export default function MapView() {
       }
     })
 
-    const eligible = itemList.filter(
-      (it) => it.lat != null && it.lng != null && !it.hidden,
-    )
+    // Include items with precise coords OR those we can approximate from state_name
+    const eligible = itemList
+      .filter((it) => !it.hidden)
+      .map((it) => {
+        if (it.lat != null && it.lng != null) return it
+        const stateCenter = getApproximateStateCoords(it.state_name)
+        if (!stateCenter) return null
+        const jittered = jitterCoords(stateCenter.lat, stateCenter.lng, 4000)
+        return { ...it, lat: jittered.lat, lng: jittered.lng, _approx: true } as Item & { _approx?: boolean }
+      })
+      .filter(Boolean) as (Item & { _approx?: boolean })[]
 
     eligible.forEach((item) => {
       if (item.lat == null || item.lng == null) return
@@ -163,7 +172,9 @@ export default function MapView() {
     })()
   }, [items])
 
-  const withCoords = items?.filter((it) => it.lat != null && it.lng != null) ?? []
+  const withCoords = items?.filter(
+    (it) => it.lat != null && it.lng != null || getApproximateStateCoords(it.state_name) != null
+  ) ?? []
 
   return (
     <div className="flex flex-col gap-0">
