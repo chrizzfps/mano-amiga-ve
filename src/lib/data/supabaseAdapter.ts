@@ -5,6 +5,8 @@ import type { Item, ItemStatus, NewItemInput } from '@/types/item'
 import type { ItemReport } from '@/types/report'
 import type { Counts, ItemFilters, ItemsRepository, SortBy } from './repository'
 
+import { getApproximateStateCoords } from '@/lib/venezuela-locations'
+
 function sortItems(items: Item[], sort: SortBy): Item[] {
   const byRecent = (a: Item, b: Item) =>
     new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
@@ -57,9 +59,15 @@ export const supabaseAdapter: ItemsRepository = {
 
   async createItem(input: NewItemInput) {
     const sb = getSupabase()
+    
+    const stateCoords = getApproximateStateCoords(input.state_name)
+    const baseLat = input.lat ?? stateCoords?.lat
+    const baseLng = input.lng ?? stateCoords?.lng
+    const jitterDist = input.lat != null && input.lng != null ? 500 : 4000
+
     const coords =
-      input.lat != null && input.lng != null
-        ? jitterCoords(input.lat, input.lng)
+      baseLat != null && baseLng != null
+        ? jitterCoords(baseLat, baseLng, jitterDist)
         : { lat: null, lng: null }
 
     const payload = {

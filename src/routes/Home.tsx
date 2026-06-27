@@ -119,40 +119,146 @@ export default function Home() {
     <div className="flex flex-col gap-0">
       {/* ── Hero ─────────────────────────────────────────────────── */}
       <section
-        className="bg-gradient-to-b from-cream-deep to-cream border-b border-black/[0.05] py-14 sm:py-20"
+        className="relative overflow-hidden bg-gradient-to-br from-cream-deep via-cream to-azul-soft/30 border-b border-black/[0.05] py-14 sm:py-20"
         aria-labelledby="hero-title"
       >
+        {/* Decorative background blobs */}
+        <div
+          aria-hidden
+          className="pointer-events-none absolute -top-24 -right-24 size-96 rounded-full bg-amarillo/10 blur-3xl"
+        />
+        <div
+          aria-hidden
+          className="pointer-events-none absolute -bottom-16 -left-16 size-72 rounded-full bg-azul/10 blur-3xl"
+        />
+
         <Container size="wide">
-          <div className="flex flex-col items-start gap-6 max-w-2xl">
-            <img src="/logo.png" alt="ManoAmiga VE" className="h-14 w-auto" />
-            <div>
-              <h1
-                id="hero-title"
-                className="text-4xl font-extrabold leading-tight sm:text-5xl lg:text-6xl text-azul-strong"
-              >
-                Da una mano.
-                <br />
-                <span className="text-amarillo-strong">Recibe una mano.</span>
-              </h1>
-              <p className="mt-4 text-lg text-ink-soft max-w-xl leading-relaxed">
-                ManoAmiga VE conecta pequeñas necesidades con personas cercanas que pueden ayudar.
-              </p>
-              <p className="mt-3 text-base text-ink-soft max-w-xl">
-                Después de una emergencia, a veces lo que salva el día es un enchufe, agua,
-                una ducha, un traslado corto, una medicina fría o un lugar seguro por unas horas.
-              </p>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-center">
+            {/* Left: copy + CTAs */}
+            <div className="flex flex-col items-start gap-6 max-w-2xl">
+              <img src="/logo.png" alt="ManoAmiga VE" className="h-14 w-auto" />
+              <div>
+                <h1
+                  id="hero-title"
+                  className="text-4xl font-extrabold leading-tight sm:text-5xl lg:text-6xl text-azul-strong"
+                >
+                  Da una mano.
+                  <br />
+                  <span className="text-amarillo-strong">Recibe una mano.</span>
+                </h1>
+                <p className="mt-4 text-lg text-ink-soft max-w-xl leading-relaxed">
+                  ManoAmiga VE conecta pequeñas necesidades con personas cercanas que pueden ayudar.
+                </p>
+                <p className="mt-3 text-base text-ink-soft max-w-xl">
+                  Después de una emergencia, a veces lo que salva el día es un enchufe, agua,
+                  una ducha, un traslado corto, una medicina fría o un lugar seguro por unas horas.
+                </p>
+              </div>
+              <div className="flex w-full flex-col gap-3 sm:w-auto sm:flex-row">
+                <Button variant="urgent" size="lg" iconLeft={<IconHandHeart size={20} />} asChild>
+                  <Link to="/publicar/necesidad">Necesito ayuda</Link>
+                </Button>
+                <Button variant="help" size="lg" iconLeft={<IconHands size={20} />} asChild>
+                  <Link to="/publicar/oferta">Puedo ayudar</Link>
+                </Button>
+              </div>
             </div>
-            <div className="flex w-full flex-col gap-3 sm:w-auto sm:flex-row">
-              <Button variant="urgent" size="lg" iconLeft={<IconHandHeart size={20} />} asChild>
-                <Link to="/publicar/necesidad">Necesito ayuda</Link>
-              </Button>
-              <Button variant="help" size="lg" iconLeft={<IconHands size={20} />} asChild>
-                <Link to="/publicar/oferta">Puedo ayudar</Link>
-              </Button>
+
+            {/* Right: Tsunami polaroid card */}
+            <div className="hidden lg:flex justify-center items-center">
+              {/* Outer float wrapper */}
+              <div
+                style={{ animation: 'ma-hero-float 5s ease-in-out infinite' }}
+                className="relative"
+              >
+                {/* Soft glow behind the card */}
+                <div
+                  aria-hidden
+                  className="absolute inset-0 -z-10 scale-[1.15] rounded-[32px] bg-amarillo/30 blur-2xl"
+                />
+
+                {/* Polaroid card */}
+                <div
+                  className="relative flex flex-col gap-0 rounded-[20px] border-4 border-white bg-white shadow-[0_20px_60px_-10px_rgba(17,74,123,0.25),0_4px_16px_rgba(0,0,0,0.12)] overflow-hidden"
+                  style={{ transform: 'rotate(2.5deg)', maxWidth: 300 }}
+                >
+                  {/* Photo */}
+                  <div className="relative overflow-hidden rounded-t-[14px]">
+                    <img
+                      src="/tsunami.avif"
+                      alt="Tsunami, un héroe de la comunidad"
+                      className="w-full object-cover"
+                      style={{
+                        height: 280,
+                        filter: 'saturate(1.1) contrast(1.04)',
+                      }}
+                    />
+                    {/* Subtle vignette */}
+                    <div
+                      aria-hidden
+                      className="pointer-events-none absolute inset-0"
+                      style={{
+                        background:
+                          'radial-gradient(ellipse at center, transparent 55%, rgba(0,0,0,0.18) 100%)',
+                      }}
+                    />
+                  </div>
+
+                  {/* Polaroid caption */}
+                  <div className="flex flex-col items-center gap-1.5 px-5 pt-4 pb-5 bg-white">
+                    <p
+                      className="text-center text-sm font-bold text-azul-strong leading-snug"
+                      style={{ fontFamily: "'Caveat', 'Patrick Hand', cursive" }}
+                    >
+                      Tú también puedes ser un héroe como Tsunami 🌊
+                    </p>
+                    <span className="inline-flex items-center gap-1 rounded-full bg-amarillo/20 px-3 py-0.5 text-[11px] font-bold text-amarillo-strong uppercase tracking-wider">
+                      ⭐ Héroe de la comunidad
+                    </span>
+                  </div>
+                </div>
+
+                {/* Decorative sticker: floating badge */}
+                <div
+                  className="absolute -top-4 -right-6 z-10 flex items-center justify-center rounded-full border-2 border-white bg-coral text-white shadow-lg"
+                  style={{
+                    width: 56,
+                    height: 56,
+                    animation: 'ma-hero-spin 12s linear infinite',
+                    fontSize: 22,
+                  }}
+                  aria-hidden
+                >
+                  🫂
+                </div>
+
+                {/* Decorative sticker: heart */}
+                <div
+                  className="absolute -bottom-4 -left-5 z-10 flex items-center justify-center rounded-full border-2 border-white bg-verde text-white shadow-lg"
+                  style={{ width: 44, height: 44, animation: 'ma-hero-float 3.5s ease-in-out infinite reverse', fontSize: 18 }}
+                  aria-hidden
+                >
+                  💚
+                </div>
+              </div>
             </div>
           </div>
         </Container>
+
+        {/* Keyframe styles */}
+        <style>{`
+          @keyframes ma-hero-float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            33% { transform: translateY(-10px) rotate(0.8deg); }
+            66% { transform: translateY(-5px) rotate(-0.5deg); }
+          }
+          @keyframes ma-hero-spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+          }
+        `}</style>
       </section>
+
 
       {/* ── Contadores ───────────────────────────────────────────── */}
       <section

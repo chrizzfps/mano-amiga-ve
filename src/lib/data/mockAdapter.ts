@@ -10,8 +10,11 @@ import type {
   SortBy,
 } from './repository'
 
+import { getApproximateStateCoords } from '@/lib/venezuela-locations'
+
 const ITEMS_KEY = 'manoamiga.items.v1'
 const REPORTS_KEY = 'manoamiga.reports.v1'
+
 
 const hasStorage = typeof window !== 'undefined' && 'localStorage' in window
 
@@ -98,9 +101,14 @@ export const mockAdapter: ItemsRepository = {
   async createItem(input) {
     const items = loadItems()
     const nowISO = new Date().toISOString()
+    const stateCoords = getApproximateStateCoords(input.state_name)
+    const baseLat = input.lat ?? stateCoords?.lat
+    const baseLng = input.lng ?? stateCoords?.lng
+    const jitterDist = input.lat != null && input.lng != null ? 500 : 4000
+
     const coords =
-      input.lat != null && input.lng != null
-        ? jitterCoords(input.lat, input.lng)
+      baseLat != null && baseLng != null
+        ? jitterCoords(baseLat, baseLng, jitterDist)
         : { lat: null, lng: null }
 
     const item: Item = {

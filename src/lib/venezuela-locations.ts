@@ -162,3 +162,15 @@ export function buildApproximateLocationLabel(data: {
   }
   return state
 }
+
+export const STATE_COORDINATES: Record<string, { lat: number; lng: number }> = {
+  'La Guaira': { lat: 10.601, lng: -66.932 },
+  'Distrito Capital': { lat: 10.485, lng: -66.901 },
+  'Miranda': { lat: 10.482, lng: -66.820 },
+  'Carabobo': { lat: 10.170, lng: -67.980 },
+  'Aragua': { lat: 10.244, lng: -67.590 },
+}
+
+export function getApproximateStateCoords(stateName: string): { lat: number; lng: number } | null {
+  return STATE_COORDINATES[stateName] || null
+}
