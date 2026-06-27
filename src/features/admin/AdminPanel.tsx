@@ -76,7 +76,7 @@ function AdminRow({ item }: { item: Item }) {
             {item.title}
           </Link>
           <p className="text-xs text-ink-faint">
-            {item.zone_text}, {item.city} · {relativeTime(item.created_at)} · Estado: {item.status}
+            {item.approximate_location_label} ({item.zone_text}) · {relativeTime(item.created_at)} · Estado: {item.status}
           </p>
         </div>
       </div>

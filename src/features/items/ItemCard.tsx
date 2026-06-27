@@ -32,7 +32,7 @@ export function ItemCard({ item, className }: ItemCardProps) {
       <Link
         to={`/item/${item.id}`}
         className="flex flex-1 flex-col gap-2 p-4 outline-none"
-        aria-label={`${item.title} — ${item.zone_text}`}
+        aria-label={`${item.title} — ${item.approximate_location_label}`}
       >
         {/* Fila superior: badges */}
         <div className="flex flex-wrap items-center gap-2">
@@ -48,10 +48,10 @@ export function ItemCard({ item, className }: ItemCardProps) {
         <h3 className="font-bold text-azul-strong leading-snug">{item.title}</h3>
 
         {/* Zona + tiempo */}
-        <p className="text-sm text-ink-soft">
-          {item.zone_text}
-          {item.city && item.city !== item.zone_text ? `, ${item.city}` : ''}&nbsp;·&nbsp;{metaTime}
-        </p>
+        <div className="text-xs text-ink-soft flex flex-col gap-0.5">
+          <p className="font-semibold text-ink-strong">{item.approximate_location_label}</p>
+          <p>Zona aproximada: {item.zone_text} &middot; {metaTime}</p>
+        </div>
 
         {/* Descripción corta */}
         <p className="text-sm text-ink line-clamp-2">{item.description}</p>

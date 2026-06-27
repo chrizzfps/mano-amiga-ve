@@ -267,5 +267,22 @@ export function seedItems(now: number = Date.now()): Item[] {
     },
   ]
 
-  return items
+  return items.map((it: any) => {
+    const state_name = it.state
+    const city_name = it.city
+    delete it.state
+    delete it.city
+    return {
+      ...it,
+      state_name,
+      municipality_name: null,
+      city_name,
+      parish_name: null,
+      reference_text: null,
+      approximate_location_label:
+        city_name && city_name.toLowerCase() !== state_name.toLowerCase()
+          ? `${city_name}, ${state_name}`
+          : state_name,
+    } as unknown as Item
+  })
 }

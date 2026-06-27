@@ -18,14 +18,18 @@ export const offerSchema = z.object({
 
   available_until: z.string().optional(),
 
-  state: z.string().min(1, 'Selecciona tu estado.'),
-  city: z.string().min(1, 'Selecciona tu ciudad.'),
+  state_name: z.string().min(1, 'Selecciona tu estado.'),
+  municipality_name: z.string().optional().nullable(),
+  city_name: z.string().optional().nullable(),
+  parish_name: z.string().optional().nullable(),
   zone_text: z.string()
     .min(2, 'Indica tu sector o zona.')
     .max(80, 'Máximo 80 caracteres.')
     .refine((v) => !v.match(/\d{4,}/), {
       message: 'No incluyas número de casa o dirección exacta.',
     }),
+  reference_text: z.string().max(120, 'Máximo 120 caracteres.').optional().nullable(),
+  approximate_location_label: z.string().min(1, 'Etiqueta de ubicación obligatoria.'),
 
   description: z.string()
     .min(10, 'Agrega un poco más de detalle.')

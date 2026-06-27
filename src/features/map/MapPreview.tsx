@@ -24,7 +24,7 @@ function buildPopup(item: Item): string {
         ${typeLabel} · ${cat}
       </p>
       <p style="font-size:14px;font-weight:700;color:#0C3358;margin:0 0 4px">${item.title}</p>
-      <p style="font-size:12px;color:#5c5862;margin:0 0 8px">${item.zone_text} · ${ago}</p>
+      <p style="font-size:12px;color:#5c5862;margin:0 0 8px">${item.approximate_location_label} (${item.zone_text}) · ${ago}</p>
       <a href="/item/${item.id}" style="display:inline-block;background:#114A7B;color:#FBF6EE;
          font-size:12px;font-weight:600;padding:5px 12px;border-radius:8px;text-decoration:none">
         Ver detalle →

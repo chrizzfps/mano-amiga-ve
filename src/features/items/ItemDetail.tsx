@@ -82,7 +82,7 @@ export function ItemDetail({ item }: ItemDetailProps) {
     if (navigator.share) {
       void navigator.share({
         title: item.title,
-        text: `${isNeed ? 'Necesidad' : 'Ofrecimiento'}: ${item.title} (${item.zone_text})`,
+        text: `${isNeed ? 'Necesidad' : 'Ofrecimiento'}: ${item.title} (${item.approximate_location_label})`,
         url: itemUrl,
       })
     } else {
@@ -127,9 +127,7 @@ export function ItemDetail({ item }: ItemDetailProps) {
         {/* Zona + tiempo */}
         <p className="flex items-center gap-1.5 text-sm text-ink-soft mb-1">
           <IconPin size={14} className="shrink-0" />
-          {item.zone_text}
-          {item.city && item.city !== item.zone_text ? `, ${item.city}` : ''}
-          {item.state ? `, ${item.state}` : ''}
+          {item.approximate_location_label}
         </p>
         <p className="flex items-center gap-1.5 text-sm text-ink-soft mb-4">
           <IconClock size={14} className="shrink-0" />
@@ -138,6 +136,26 @@ export function ItemDetail({ item }: ItemDetailProps) {
             ? ` · ${formatUntil(item.available_until)}`
             : ''}
         </p>
+
+        {/* Bloque de Ubicación Híbrida Estructurada */}
+        <div className="rounded-xl border border-line bg-cream-deep/20 p-4 mb-4 text-sm flex flex-col gap-2">
+          <div className="flex flex-col gap-0.5">
+            <span className="text-xs font-bold text-ink-faint uppercase tracking-wide">Ubicación aproximada</span>
+            <span className="font-semibold text-ink-strong">{item.approximate_location_label}</span>
+          </div>
+          
+          <div className="flex flex-col gap-0.5">
+            <span className="text-xs font-bold text-ink-faint uppercase tracking-wide">Sector / Zona</span>
+            <span className="text-ink">{item.zone_text}</span>
+          </div>
+
+          {item.reference_text && (
+            <div className="flex flex-col gap-0.5">
+              <span className="text-xs font-bold text-ink-faint uppercase tracking-wide">Punto de referencia</span>
+              <span className="text-ink italic">"{item.reference_text}"</span>
+            </div>
+          )}
+        </div>
 
         {/* Descripción */}
         <p className="text-ink leading-relaxed mb-4">{item.description}</p>

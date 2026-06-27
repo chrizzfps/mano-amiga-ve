@@ -8,13 +8,13 @@ import { ITEMS_KEY, COUNTS_KEY } from '@/features/feed/useItemsQuery'
 import { needSchema, type NeedFormValues } from '@/lib/validation/needSchema'
 import { CATEGORIES } from '@/lib/constants/categories'
 import { URGENCY_OPTIONS, CONTACT_METHODS } from '@/lib/constants/taxonomy'
-import { STATE_NAMES, citiesFor } from '@/lib/constants/venezuela'
 import { useToast } from '@/components/ui'
-import { Input, Textarea, Select, RadioGroup } from '@/components/ui'
+import { Input, Textarea, RadioGroup } from '@/components/ui'
 import type { RadioOption } from '@/components/ui'
 import { CategoryIcon } from '@/components/icons'
 import { StepShell } from './StepShell'
 import { PublishSuccess } from './PublishSuccess'
+import { LocationFields } from '@/components/ui/LocationFields'
 import type { Item } from '@/types/item'
 import type { CategoryId } from '@/types/item'
 
@@ -56,15 +56,9 @@ export function NeedWizard() {
     defaultValues: { urgency: 'medium', contact_method: 'whatsapp' },
   })
 
-  const stateVal = watch('state')
   const contactMethod = watch('contact_method')
   const categoryVal = watch('category')
   const urgencyVal = watch('urgency')
-
-  const stateOptions = STATE_NAMES.map((s) => ({ value: s, label: s }))
-  const cityOptions = stateVal
-    ? citiesFor(stateVal).map((c) => ({ value: c, label: c }))
-    : []
 
   const mutation = useMutation({
     mutationFn: (data: NeedFormValues) =>
@@ -73,9 +67,13 @@ export function NeedWizard() {
         category: data.category,
         title: data.title,
         description: data.description,
+        state_name: data.state_name,
+        municipality_name: data.municipality_name ?? null,
+        city_name: data.city_name ?? null,
+        parish_name: data.parish_name ?? null,
         zone_text: data.zone_text,
-        state: data.state,
-        city: data.city,
+        reference_text: data.reference_text ?? null,
+        approximate_location_label: data.approximate_location_label,
         urgency: data.urgency,
         contact_method: data.contact_method,
         contact_value: data.contact_value ?? '',
@@ -95,7 +93,7 @@ export function NeedWizard() {
 
   const FIELDS_PER_STEP: Array<Array<keyof NeedFormValues>> = [
     ['category'],
-    ['state', 'city', 'zone_text'],
+    ['state_name', 'city_name', 'zone_text', 'reference_text', 'approximate_location_label'],
     ['urgency'],
     ['title', 'description'],
     ['contact_method', 'contact_value'],
@@ -164,34 +162,12 @@ export function NeedWizard() {
       )}
 
       {step === 2 && (
-        <div className="flex flex-col gap-4">
-          <Select
-            label="Estado"
-            placeholder="Selecciona tu estado"
-            options={stateOptions}
-            required
-            error={errors.state?.message}
-            {...register('state', { onChange: () => setValue('city', '') })}
-          />
-          <Select
-            label="Ciudad / municipio"
-            placeholder={stateVal ? 'Selecciona la ciudad' : 'Primero elige el estado'}
-            options={cityOptions}
-            disabled={!stateVal}
-            required
-            error={errors.city?.message}
-            {...register('city')}
-          />
-          <Input
-            label="Sector o zona"
-            placeholder="Ej. Catia La Mar, sector Los Pinos"
-            hint="Solo el nombre del sector. Sin número de casa."
-            maxLength={80}
-            required
-            error={errors.zone_text?.message}
-            {...register('zone_text')}
-          />
-        </div>
+        <LocationFields
+          register={register}
+          setValue={setValue}
+          watch={watch}
+          errors={errors}
+        />
       )}
 
       {step === 3 && (
@@ -275,7 +251,9 @@ function ReviewStep({ values }: { values: NeedFormValues }) {
   const catMeta = CATEGORIES.find((c) => c.id === values.category)
   const rows = [
     { label: 'Categoría', value: catMeta?.label ?? '' },
-    { label: 'Zona', value: `${values.zone_text}, ${values.city}, ${values.state}` },
+    { label: 'Ubicación', value: values.approximate_location_label },
+    { label: 'Sector o Zona', value: values.zone_text },
+    ...(values.reference_text ? [{ label: 'Punto de referencia', value: values.reference_text }] : []),
     { label: 'Urgencia', value: URGENCY_OPTIONS.find((u) => u.value === values.urgency)?.label ?? '' },
     { label: 'Necesito', value: values.title },
     { label: 'Detalle', value: values.description },

@@ -32,7 +32,7 @@ export const supabaseAdapter: ItemsRepository = {
     if (filters.fulfilledOnly) q = q.eq('status', 'fulfilled')
     if (filters.zone) {
       const z = filters.zone.trim()
-      q = q.or(`zone_text.ilike.%${z}%,city.ilike.%${z}%,state.ilike.%${z}%`)
+      q = q.or(`zone_text.ilike.%${z}%,city_name.ilike.%${z}%,state_name.ilike.%${z}%,approximate_location_label.ilike.%${z}%`)
     }
 
     const { data, error } = await q
@@ -67,9 +67,13 @@ export const supabaseAdapter: ItemsRepository = {
       category: input.category,
       title: input.title,
       description: input.description,
+      state_name: input.state_name,
+      municipality_name: input.municipality_name ?? null,
+      city_name: input.city_name ?? null,
+      parish_name: input.parish_name ?? null,
       zone_text: input.zone_text,
-      state: input.state,
-      city: input.city,
+      reference_text: input.reference_text ?? null,
+      approximate_location_label: input.approximate_location_label,
       lat: coords.lat,
       lng: coords.lng,
       urgency: input.urgency,

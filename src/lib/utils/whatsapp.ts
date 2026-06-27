@@ -13,7 +13,7 @@ export function buildShareMessage(item: Item, url: string): string {
     '',
     `${lead}: ${item.title}`,
     `Categoría: ${categoryLabel(item.category)}`,
-    `Zona: ${item.zone_text}, ${item.city}`,
+    `Ubicación: ${item.approximate_location_label} (${item.zone_text})`,
     `Urgencia: ${URGENCY[item.urgency].label}`,
   ]
   if (item.available_until) {

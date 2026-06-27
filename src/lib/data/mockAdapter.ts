@@ -67,7 +67,7 @@ function matches(it: Item, f: ItemFilters): boolean {
   if (f.fulfilledOnly && it.status !== 'fulfilled') return false
   if (f.zone) {
     const q = f.zone.trim().toLowerCase()
-    const hay = `${it.zone_text} ${it.city} ${it.state}`.toLowerCase()
+    const hay = `${it.zone_text} ${it.city_name ?? ''} ${it.state_name} ${it.approximate_location_label}`.toLowerCase()
     if (!hay.includes(q)) return false
   }
   return true
@@ -109,9 +109,13 @@ export const mockAdapter: ItemsRepository = {
       category: input.category,
       title: input.title,
       description: input.description,
+      state_name: input.state_name,
+      municipality_name: input.municipality_name ?? null,
+      city_name: input.city_name ?? null,
+      parish_name: input.parish_name ?? null,
       zone_text: input.zone_text,
-      state: input.state,
-      city: input.city,
+      reference_text: input.reference_text ?? null,
+      approximate_location_label: input.approximate_location_label,
       lat: coords.lat,
       lng: coords.lng,
       urgency: input.urgency,

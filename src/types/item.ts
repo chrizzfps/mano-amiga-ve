@@ -30,10 +30,14 @@ export interface Item {
   category: CategoryId
   title: string
   description: string
-  /** Zona aproximada en texto, ej. "Catia La Mar". Nunca dirección exacta. */
+  /** Nuevos campos de ubicación híbrida y segura */
+  state_name: string
+  municipality_name: string | null
+  city_name: string | null
+  parish_name: string | null
   zone_text: string
-  state: string
-  city: string
+  reference_text: string | null
+  approximate_location_label: string
   /** Coordenadas aproximadas (con jitter). Pueden ser null. */
   lat: number | null
   lng: number | null
@@ -60,11 +64,25 @@ export type NewItemInput = Pick<
   | 'category'
   | 'title'
   | 'description'
+  | 'state_name'
   | 'zone_text'
-  | 'state'
-  | 'city'
+  | 'approximate_location_label'
   | 'urgency'
   | 'contact_method'
   | 'contact_value'
 > &
-  Partial<Pick<Item, 'lat' | 'lng' | 'capacity' | 'available_until' | 'expires_at' | 'status'>>
+  Partial<
+    Pick<
+      Item,
+      | 'municipality_name'
+      | 'city_name'
+      | 'parish_name'
+      | 'reference_text'
+      | 'lat'
+      | 'lng'
+      | 'capacity'
+      | 'available_until'
+      | 'expires_at'
+      | 'status'
+    >
+  >

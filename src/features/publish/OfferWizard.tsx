@@ -8,13 +8,13 @@ import { ITEMS_KEY, COUNTS_KEY } from '@/features/feed/useItemsQuery'
 import { offerSchema, type OfferFormValues } from '@/lib/validation/offerSchema'
 import { CATEGORIES } from '@/lib/constants/categories'
 import { CONTACT_METHODS } from '@/lib/constants/taxonomy'
-import { STATE_NAMES, citiesFor } from '@/lib/constants/venezuela'
 import { useToast } from '@/components/ui'
-import { Input, Textarea, Select, RadioGroup } from '@/components/ui'
+import { Input, Textarea, RadioGroup } from '@/components/ui'
 import type { RadioOption } from '@/components/ui'
 import { CategoryIcon } from '@/components/icons'
 import { StepShell } from './StepShell'
 import { PublishSuccess } from './PublishSuccess'
+import { LocationFields } from '@/components/ui/LocationFields'
 import type { Item, CategoryId } from '@/types/item'
 
 const TOTAL = 7
@@ -58,14 +58,8 @@ export function OfferWizard() {
     defaultValues: { contact_method: 'whatsapp' },
   })
 
-  const stateVal = watch('state')
   const contactMethod = watch('contact_method')
   const categoryVal = watch('category')
-
-  const stateOptions = STATE_NAMES.map((s) => ({ value: s, label: s }))
-  const cityOptions = stateVal
-    ? citiesFor(stateVal).map((c) => ({ value: c, label: c }))
-    : []
 
   const mutation = useMutation({
     mutationFn: (data: OfferFormValues) =>
@@ -74,9 +68,13 @@ export function OfferWizard() {
         category: data.category,
         title: data.title,
         description: data.description,
+        state_name: data.state_name,
+        municipality_name: data.municipality_name ?? null,
+        city_name: data.city_name ?? null,
+        parish_name: data.parish_name ?? null,
         zone_text: data.zone_text,
-        state: data.state,
-        city: data.city,
+        reference_text: data.reference_text ?? null,
+        approximate_location_label: data.approximate_location_label,
         urgency: 'low',
         contact_method: data.contact_method,
         contact_value: data.contact_value ?? '',
@@ -99,7 +97,7 @@ export function OfferWizard() {
     ['category'],
     ['title'],
     ['capacity', 'available_until'],
-    ['state', 'city', 'zone_text'],
+    ['state_name', 'city_name', 'zone_text', 'reference_text', 'approximate_location_label'],
     ['description'],
     ['contact_method', 'contact_value'],
     [],
@@ -219,33 +217,12 @@ export function OfferWizard() {
       )}
 
       {step === 4 && (
-        <div className="flex flex-col gap-4">
-          <Select
-            label="Estado"
-            placeholder="Selecciona tu estado"
-            options={stateOptions}
-            required
-            error={errors.state?.message}
-            {...register('state', { onChange: () => setValue('city', '') })}
-          />
-          <Select
-            label="Ciudad / municipio"
-            placeholder={stateVal ? 'Selecciona la ciudad' : 'Primero elige el estado'}
-            options={cityOptions}
-            disabled={!stateVal}
-            required
-            error={errors.city?.message}
-            {...register('city')}
-          />
-          <Input
-            label="Sector o zona"
-            placeholder="Ej. Chacao, sector Los Palos Grandes"
-            maxLength={80}
-            required
-            error={errors.zone_text?.message}
-            {...register('zone_text')}
-          />
-        </div>
+        <LocationFields
+          register={register}
+          setValue={setValue}
+          watch={watch}
+          errors={errors}
+        />
       )}
 
       {step === 5 && (
@@ -296,7 +273,9 @@ function OfferReviewStep({ values }: { values: OfferFormValues }) {
   const rows = [
     { label: 'Categoría', value: catMeta?.label ?? '' },
     { label: 'Ofrezco', value: values.title },
-    { label: 'Zona', value: `${values.zone_text}, ${values.city}, ${values.state}` },
+    { label: 'Ubicación', value: values.approximate_location_label },
+    { label: 'Sector o Zona', value: values.zone_text },
+    ...(values.reference_text ? [{ label: 'Punto de referencia', value: values.reference_text }] : []),
     ...(values.capacity ? [{ label: 'Capacidad', value: String(values.capacity) }] : []),
     ...(values.available_until
       ? [{ label: 'Hasta', value: new Date(values.available_until).toLocaleString('es-VE') }]

@@ -43,7 +43,7 @@ function LiteRow({ item }: { item: Item }) {
         </div>
         <span className="font-bold text-azul-strong">{item.title}</span>
         <span className="text-sm text-ink-soft">
-          {item.zone_text} · {time}
+          {item.approximate_location_label} ({item.zone_text}) · {time}
         </span>
         {isNeed && (
           <span className="text-xs text-ink-faint">{urgMeta.label}</span>
