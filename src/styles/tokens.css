@@ -1,0 +1,59 @@
+/**
+ * ManoAmiga VE — design tokens
+ * Identidad propia: clara, estilizada, esperanzadora. Ni gubernamental ni fúnebre.
+ * Tailwind v4 lee estas variables vía @theme y genera utilidades (bg-azul, text-coral, …).
+ */
+@theme {
+  /* ---- Fondos: blanco puro estilo Apple ---- */
+  --color-cream: #ffffff;           /* fondo principal (blanco) */
+  --color-cream-deep: #f5f5f7;      /* superficie secundaria (Apple gray) */
+  --color-surface: #ffffff;
+
+  /* ---- Texto: carbón Apple ---- */
+  --color-ink: #1d1d1f;             /* texto principal — Apple text */
+  --color-ink-soft: #6e6e73;        /* texto secundario */
+  --color-ink-faint: #aeaeb2;       /* metadatos / terciario */
+
+  /* ---- Azul de marca (más vivo sobre blanco) ---- */
+  --color-azul: #1054a4;
+  --color-azul-strong: #0a3d80;
+  --color-azul-soft: #eef4ff;       /* fondo azul muy suave */
+
+  /* ---- Amarillo / acento ---- */
+  --color-amarillo: #f5a623;
+  --color-amarillo-strong: #d4891a;
+  --color-amarillo-soft: #fff3dc;
+
+  /* ---- Coral / urgencia ---- */
+  --color-coral: #e8402e;
+  --color-coral-strong: #c42e1c;
+  --color-coral-soft: #fee8e6;
+
+  /* ---- Verde / ayuda disponible ---- */
+  --color-verde: #1b8a5f;
+  --color-verde-strong: #146648;
+  --color-verde-soft: #d8f0e7;
+
+  /* ---- Bordes ultra sutiles (Apple separator) ---- */
+  --color-line: #e5e5ea;
+  --color-line-strong: #c7c7cc;
+
+  /* ---- Tipografía: Inter de Google Fonts ---- */
+  --font-sans: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+
+  /* ---- Radios Apple-ish ---- */
+  --radius-sm: 0.375rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 0.75rem;
+  --radius-xl: 1rem;
+  --radius-2xl: 1.5rem;
+
+  /* ---- Sombras limpias, sin tinte cálido ---- */
+  --shadow-soft: 0 1px 2px rgba(0, 0, 0, 0.04),
+    0 4px 16px rgba(0, 0, 0, 0.06);
+  --shadow-lift: 0 4px 8px rgba(0, 0, 0, 0.06),
+    0 12px 28px rgba(0, 0, 0, 0.10);
+
+  /* ---- Animación discreta ---- */
+  --ease-out-soft: cubic-bezier(0.22, 1, 0.36, 1);
+}
