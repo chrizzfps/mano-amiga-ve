@@ -80,9 +80,13 @@ export const supabaseAdapter: ItemsRepository = {
       status: input.status ?? (input.type === 'need' ? 'open' : 'available'),
       contact_method: input.contact_method,
       contact_value: input.contact_value,
-      capacity: input.capacity ?? null,
-      available_until: input.available_until ?? null,
-      expires_at: input.expires_at ?? null,
+      capacity: input.capacity && !isNaN(input.capacity) ? input.capacity : null,
+      available_until:
+        input.available_until && input.available_until.trim() !== ''
+          ? input.available_until
+          : null,
+      expires_at:
+        input.expires_at && input.expires_at.trim() !== '' ? input.expires_at : null,
     }
 
     const { data, error } = await sb.from('items').insert(payload).select().single()
