@@ -1,5 +1,5 @@
 import { useEffect, useState, useRef } from 'react'
-import { UseFormRegister, UseFormSetValue, UseFormWatch, FieldErrors } from 'react-hook-form'
+import type { UseFormRegister, UseFormSetValue, UseFormWatch, FieldErrors } from 'react-hook-form'
 import { Input, Select } from '@/components/ui'
 import { getStates, getPlacesByState, buildApproximateLocationLabel } from '@/lib/venezuela-locations'
 

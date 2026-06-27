@@ -21,7 +21,7 @@ export function seedItems(now: number = Date.now()): Item[] {
     hidden: false,
   }
 
-  const items: Item[] = [
+  const items: any[] = [
     {
       ...base,
       id: 'n-insulina',
