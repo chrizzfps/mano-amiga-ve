@@ -3,8 +3,8 @@ import { createClient, type SupabaseClient } from '@supabase/supabase-js'
 const rawUrl = import.meta.env.VITE_SUPABASE_URL as string | undefined
 const rawKey = import.meta.env.VITE_SUPABASE_ANON_KEY as string | undefined
 
-const url = rawUrl?.trim()
-const anonKey = rawKey?.trim()
+const url = rawUrl?.trim().replace(/^['"]|['"]$/g, '')
+const anonKey = rawKey?.trim().replace(/^['"]|['"]$/g, '')
 
 /** ¿Hay credenciales de Supabase configuradas? Si no, corremos en modo mock. */
 export const isSupabaseConfigured = Boolean(url && anonKey && url !== 'undefined' && anonKey !== 'undefined')
